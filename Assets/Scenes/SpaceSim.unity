@@ -57530,11 +57530,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7813874041988425512, guid: b75800302838cfe4a8da91d372ae2f63,
-        type: 3}
-      propertyPath: m_ScaleInLightmap
-      value: 0.01
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b75800302838cfe4a8da91d372ae2f63, type: 3}
 --- !u!108 &4615691828132526665
@@ -58240,6 +58235,7 @@ MonoBehaviour:
   _screenPixelHeight: 0
   _mousePercentOfDisplayHeight: 0
   _defaultRollSpeed: 5000
+  _thrustSpeed: 5000
   _thrusterBoostMultiplier: 1
   _boostActive: 0
   _thrustActive: 0

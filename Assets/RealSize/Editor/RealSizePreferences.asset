@@ -29,12 +29,12 @@ MonoBehaviour:
   sizeUnitsDisplayedPerRow: 4
   onlyShowCustomUnits: 0
   customUnits: []
-  drawBoundsInSceneView: 0
+  drawBoundsInSceneView: 1
   boundsLineThickness: {x: 1, y: 1, z: 1}
   boundsColorX: {r: 1, g: 0, b: 0, a: 1}
   boundsColorY: {r: 0, g: 1, b: 0, a: 1}
   boundsColorZ: {r: 0, g: 0, b: 1, a: 1}
-  drawSizeLabelsInSceneView: 0
+  drawSizeLabelsInSceneView: 1
   roundSizeLabel: 1
   displaySizeUnit: 1
   labelFontSize: 11

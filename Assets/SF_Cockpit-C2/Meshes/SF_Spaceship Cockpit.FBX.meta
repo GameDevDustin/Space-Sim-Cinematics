@@ -1,81 +1,159 @@
 fileFormatVersion: 2
 guid: dbffc5da38139e6458ee669bf1185142
-timeCreated: 1473239348
-licenseType: Store
 ModelImporter:
-  serializedVersion: 19
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: Spaceship_HUDs-A
-    100004: Spaceship_HUDs-B
-    100006: Spaceship_Joystick
-    100008: Spaceship_Thrust lever
-    400000: //RootNode
-    400002: Spaceship_HUDs-A
-    400004: Spaceship_HUDs-B
-    400006: Spaceship_Joystick
-    400008: Spaceship_Thrust lever
-    2300000: //RootNode
-    2300002: Spaceship_HUDs-A
-    2300004: Spaceship_HUDs-B
-    2300006: Spaceship_Joystick
-    2300008: Spaceship_Thrust lever
-    3300000: //RootNode
-    3300002: Spaceship_HUDs-A
-    3300004: Spaceship_HUDs-B
-    3300006: Spaceship_Joystick
-    3300008: Spaceship_Thrust lever
-    4300000: SF_Spaceship Cockpit
-    4300002: Spaceship_HUDs-A
-    4300004: Spaceship_HUDs-B
-    4300006: Spaceship_Thrust lever
-    4300008: Spaceship_Joystick
+  serializedVersion: 21202
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: Spaceship_HUDs-A
+  - first:
+      1: 100004
+    second: Spaceship_HUDs-B
+  - first:
+      1: 100006
+    second: Spaceship_Joystick
+  - first:
+      1: 100008
+    second: Spaceship_Thrust lever
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: Spaceship_HUDs-A
+  - first:
+      4: 400004
+    second: Spaceship_HUDs-B
+  - first:
+      4: 400006
+    second: Spaceship_Joystick
+  - first:
+      4: 400008
+    second: Spaceship_Thrust lever
+  - first:
+      23: 2300000
+    second: //RootNode
+  - first:
+      23: 2300002
+    second: Spaceship_HUDs-A
+  - first:
+      23: 2300004
+    second: Spaceship_HUDs-B
+  - first:
+      23: 2300006
+    second: Spaceship_Joystick
+  - first:
+      23: 2300008
+    second: Spaceship_Thrust lever
+  - first:
+      33: 3300000
+    second: //RootNode
+  - first:
+      33: 3300002
+    second: Spaceship_HUDs-A
+  - first:
+      33: 3300004
+    second: Spaceship_HUDs-B
+  - first:
+      33: 3300006
+    second: Spaceship_Joystick
+  - first:
+      33: 3300008
+    second: Spaceship_Thrust lever
+  - first:
+      43: 4300000
+    second: SF_Spaceship Cockpit
+  - first:
+      43: 4300002
+    second: Spaceship_HUDs-A
+  - first:
+      43: 4300004
+    second: Spaceship_HUDs-B
+  - first:
+      43: 4300006
+    second: Spaceship_Thrust lever
+  - first:
+      43: 4300008
+    second: Spaceship_Joystick
+  externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.01
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -85,11 +163,17 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 0.01
     rootMotionBoneName: 
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 0
   humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

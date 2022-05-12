@@ -7,18 +7,28 @@ using Cinemachine;
 public class ShipControl : MonoBehaviour
 {
     //Player control related
+    [Header("Player Control Related")]
+    [Space(5)]
     [SerializeField] private GameObject _playerShip;
     private Rigidbody _playerShipRigidBody;
+    [Space(5)]
     [SerializeField] private float _xMouseAcceleration = 20f;
     [SerializeField] private float _yMouseAcceleration = 35f;
-    [SerializeField] private float _maxMouseInputLagTime;
-    [SerializeField] private Vector2 _lastMouseInputValues;
+    [Space(5)]
+    [SerializeField] private float _xInputValue;
+    [SerializeField] private float _yInputValue;
+    [SerializeField] private float _zInputValue;
+    [Space(5)]
+    //[SerializeField] private Vector2 _lastMouseInputValues;
     [SerializeField] private Vector3 _absoluteMousePosition;
     [SerializeField] private Vector3 _relativeMousePosition;
+    [Space(5)]
     [SerializeField] private int _screenPixelWidth;
-    [SerializeField] private float _mousePercentOfDisplayWidth;
     [SerializeField] private int _screenPixelHeight;
+    [Space(5)]
+    [SerializeField] private float _mousePercentOfDisplayWidth;
     [SerializeField] private float _mousePercentOfDisplayHeight;
+    [Space(5)]
     [SerializeField] private float _defaultRollSpeed = 5000f;
     [SerializeField] private float _thrustSpeed = 5000f;
     [SerializeField] private float _thrusterBoostMultiplier = 1f;
@@ -28,26 +38,34 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private float _currentTime;
 
     //Camera related
+    [Header("Camera Control Related")]
+    [Space(5)]
     [SerializeField] private Camera _mainCamera;
+    [Space(5)]
     [SerializeField] private LayerMask _followMask;
     [SerializeField] private LayerMask _cockpitMask;
+    [Space(10)]
     [SerializeField] private string _currentVCam;
     [SerializeField] private CinemachineVirtualCamera _followVCam;
     [SerializeField] private CinemachineVirtualCamera _cockpitVCam;
     [SerializeField] private CinemachineVirtualCamera[] _cinematicVCams;
 
     //Animation related
+    [Header("Animation Related")]
+    [Space(5)]
+    [SerializeField] private Animator _starshipAnimator;
     [SerializeField] private Animator _wingsAnimator;
     [SerializeField] private Animator _minigunAnimator1;
     [SerializeField] private Animator _minigunAnimator2;
-    [SerializeField] private Animator _starshipAnimator;
-
+    
     //External scripts
+    [Header("References")]
+    [Space(5)]
     [SerializeField] private ThrusterControl _thrusterControlScript;
 
     private void OnEnable()
     {
-        _lastMouseInputValues = Vector2.zero;
+        //_lastMouseInputValues = Vector2.zero;
 
         _screenPixelWidth = Screen.width;
         _screenPixelHeight = Screen.height;
@@ -228,7 +246,7 @@ public class ShipControl : MonoBehaviour
             _thrusterControlScript.DisableThrusterSpotlight(2);
         }
 
-        if ((_thrustActive) || ((_currentTime - _timeThrustLastActive) < 5f) && _currentTime > 5f)
+        if ((_thrustActive) || ((_currentTime - _timeThrustLastActive) < 9f) && _currentTime > 5f)
         {
             ApplyMouseInput(zInput);
         } else
@@ -290,15 +308,33 @@ public class ShipControl : MonoBehaviour
         if (_mousePercentOfDisplayHeight > 0.47f && _mousePercentOfDisplayHeight < 0.53f)
         {
             newInput.y = 0;
-        } 
+        }
 
-        _lastMouseInputValues = newInput;
+        //_xInputValue = newInput.x;
+        //_yInputValue = newInput.y;
 
-        return _lastMouseInputValues;
+        //Round and clamp values to reduce AABB errors
+        newInput.x = Mathf.Round(newInput.x * 100f) * 0.01f;
+        newInput.y = Mathf.Round(newInput.y * 100f) * 0.01f;
+        newInput.x = Mathf.Clamp(newInput.x, -1.0f, 1.0f);
+        newInput.y = Mathf.Clamp(newInput.y, -1.0f, 1.0f);
+
+        _xInputValue = newInput.x;
+        _yInputValue = newInput.y;
+
+        //_lastMouseInputValues = newInput;
+
+        //return _lastMouseInputValues;
+        return newInput;
     }
 
     private void RotatePlayerShip(float xInput = 0, float yInput = 0, float zInput = 0, bool rollOnly = false)
     {
+        //Round value to reduce AABB errors
+        zInput = Mathf.Round(zInput * 100f) * 0.01f;
+
+        _zInputValue = zInput;
+
         //roll
         transform.Rotate(Vector3.forward, zInput * Time.deltaTime);
 
@@ -320,7 +356,6 @@ public class ShipControl : MonoBehaviour
     private void AddThrust(Vector3 newAddForce)
     {
         _playerShipRigidBody.AddForce(newAddForce, ForceMode.Force);
-        
     }
 
     private void AddSlowingThrust(Vector3 newAddForce)
@@ -338,6 +373,9 @@ public class ShipControl : MonoBehaviour
                     AddThrust(transform.forward * (_thrustSpeed * 0.4f));
                     break;
                 case < 5f:
+                    AddThrust(transform.forward * (_thrustSpeed * 0.2f));
+                    break;
+                case < 9f:
                     AddThrust(transform.forward * (_thrustSpeed * 0.1f));
                     break;
             }

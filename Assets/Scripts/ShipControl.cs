@@ -19,7 +19,6 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private float _yInputValue;
     [SerializeField] private float _zInputValue;
     [Space(5)]
-    //[SerializeField] private Vector2 _lastMouseInputValues;
     [SerializeField] private Vector3 _absoluteMousePosition;
     [SerializeField] private Vector3 _relativeMousePosition;
     [Space(5)]
@@ -34,7 +33,7 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private float _thrusterBoostMultiplier = 1f;
     [SerializeField] private bool _boostActive = false;
     [SerializeField] private bool _thrustActive = false;
-    [SerializeField] private float _timeThrustLastActive;
+    [SerializeField] private float _timeThrustLastActive = 0;
     [SerializeField] private float _currentTime;
 
     //Camera related
@@ -48,7 +47,16 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private string _currentVCam;
     [SerializeField] private CinemachineVirtualCamera _followVCam;
     [SerializeField] private CinemachineVirtualCamera _cockpitVCam;
+    [SerializeField] private string _lastVCamUsed = "FollowCam";
+    [Space(5)]
     [SerializeField] private CinemachineVirtualCamera[] _cinematicVCams;
+    [SerializeField] private float _lastCinematicVCamStartTime = 0;
+
+    [SerializeField] private int _lastCinematicVCamUsed = -1;
+    [SerializeField] private bool _cinematicVCamsActive = false;
+    [SerializeField] private bool _cinematicPathInProgress = false;
+    [SerializeField] private float _cinematicPathPosition = 0f;
+    [SerializeField] private float _cinematicPathSpeed = 0.0015f;
 
     //Animation related
     [Header("Animation Related")]
@@ -65,8 +73,6 @@ public class ShipControl : MonoBehaviour
 
     private void OnEnable()
     {
-        //_lastMouseInputValues = Vector2.zero;
-
         _screenPixelWidth = Screen.width;
         _screenPixelHeight = Screen.height;
     }
@@ -92,6 +98,10 @@ public class ShipControl : MonoBehaviour
     void Update()
     {
         CheckInput();
+        if (_cinematicVCamsActive)
+        {
+            MoveVCamDolly(_cinematicVCams[_lastCinematicVCamUsed]);
+        }
     }
 
     private void FixedUpdate()
@@ -118,6 +128,7 @@ public class ShipControl : MonoBehaviour
         }
 
         _currentTime = Time.time;
+        CheckPlayerIdle();
     }
 
     void CheckInputFixedUpdate()
@@ -127,11 +138,11 @@ public class ShipControl : MonoBehaviour
 
     void CheckPlayerIdle()
     {
-        //Determine if player has been idle for 5 seconds
-
-
-        //if so, start cinematic vcams
-
+        //Determine if player has been idle for 10 seconds
+        if (_currentTime - _timeThrustLastActive > 10f)
+        {
+            SwitchCamera("CinematicCam");
+        }
     }
 
     private void ApplyKeyboardInput()
@@ -204,7 +215,7 @@ public class ShipControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            //Yaw Left
+            //Roll Left
             zInput = _defaultRollSpeed * Time.deltaTime;
             aActive = true;
         }
@@ -215,7 +226,7 @@ public class ShipControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
-            //Yaw Right
+            //Roll Right
             zInput = -_defaultRollSpeed * Time.deltaTime;
             dActive = true;
         }
@@ -244,6 +255,15 @@ public class ShipControl : MonoBehaviour
         {
             _thrusterControlScript.DisableThrusterSpotlight(1);
             _thrusterControlScript.DisableThrusterSpotlight(2);
+        }
+
+        if (wActive || sActive || aActive || dActive)
+        {
+            if (_cinematicVCamsActive == true)
+            {
+                SwitchCamera(_lastVCamUsed);
+                _cinematicVCamsActive = false;
+            }
         }
 
         if ((_thrustActive) || ((_currentTime - _timeThrustLastActive) < 9f) && _currentTime > 5f)
@@ -310,9 +330,6 @@ public class ShipControl : MonoBehaviour
             newInput.y = 0;
         }
 
-        //_xInputValue = newInput.x;
-        //_yInputValue = newInput.y;
-
         //Round and clamp values to reduce AABB errors
         newInput.x = Mathf.Round(newInput.x * 100f) * 0.01f;
         newInput.y = Mathf.Round(newInput.y * 100f) * 0.01f;
@@ -322,9 +339,6 @@ public class ShipControl : MonoBehaviour
         _xInputValue = newInput.x;
         _yInputValue = newInput.y;
 
-        //_lastMouseInputValues = newInput;
-
-        //return _lastMouseInputValues;
         return newInput;
     }
 
@@ -389,8 +403,6 @@ public class ShipControl : MonoBehaviour
 
     void SwitchCamera(string CameraName)
     {
-
-
         switch (CameraName)
         {
             case "FollowCam":
@@ -400,13 +412,14 @@ public class ShipControl : MonoBehaviour
 
                 if (_cinematicVCams != null)
                 {
-                    foreach (CinemachineVirtualCamera vCams in _cinematicVCams)
+                    foreach (CinemachineVirtualCamera vCam in _cinematicVCams)
                     {
-                        vCams.Priority = 10;
+                        vCam.Priority = 10;
                     }
                 }
 
                 _followVCam.Priority = 100;
+                _lastVCamUsed = "FollowCam";
 
                 //Switch engine background audio
                 _followVCam.GetComponent<AudioSource>().enabled = true;
@@ -423,13 +436,14 @@ public class ShipControl : MonoBehaviour
 
                 if (_cinematicVCams != null)
                 {
-                    foreach (CinemachineVirtualCamera vCams in _cinematicVCams)
+                    foreach (CinemachineVirtualCamera vCam in _cinematicVCams)
                     {
-                        vCams.Priority = 10;
+                        vCam.Priority = 10;
                     }
                 }
 
                 _cockpitVCam.Priority = 100;
+                _lastVCamUsed = "CockpitCam";
 
                 //Switch engine background audio
                 _cockpitVCam.GetComponent<AudioSource>().enabled = true;
@@ -444,7 +458,7 @@ public class ShipControl : MonoBehaviour
                 _followVCam.Priority = 10;
                 _cockpitVCam.Priority = 10;
 
-                //set priority for cinematic vcams
+                CycleThroughCinematicVCams();
 
                 //Switch engine background audio
                 _followVCam.GetComponent<AudioSource>().enabled = true;
@@ -454,6 +468,63 @@ public class ShipControl : MonoBehaviour
 
                 break;
         }
+    }
+
+    private void CycleThroughCinematicVCams()
+    {
+        if (_currentTime - _lastCinematicVCamStartTime > 9f)
+        {
+            foreach (CinemachineVirtualCamera vCam in _cinematicVCams)
+            {
+                vCam.Priority = 10;
+            }
+
+            switch (_lastCinematicVCamUsed)
+            {
+                case -1:
+                    _cinematicVCams[2].Priority = 100;
+                    _lastCinematicVCamUsed = 2;
+                    _cinematicPathSpeed = 0.0015f;
+                    break;
+                case 0:
+                    _cinematicVCams[2].Priority = 100;
+                    _lastCinematicVCamUsed = 2;
+                    _cinematicPathSpeed = 0.0015f;
+                    ResetCinematicVCamPosition(_cinematicVCams[0]);
+                    ResetCinematicVCamPosition(_cinematicVCams[1]);
+                    ResetCinematicVCamPosition(_cinematicVCams[2]);
+                    break;
+                case 1:
+                    _cinematicVCams[0].Priority = 100;
+                    _lastCinematicVCamUsed = 0;
+                    _cinematicPathSpeed = 0.0015f;
+                    break;
+                case 2:
+                    _cinematicVCams[1].Priority = 100;
+                    _lastCinematicVCamUsed = 1;
+                    _cinematicPathSpeed = 0.0015f;
+                    break;
+            }
+
+            _lastCinematicVCamStartTime = _currentTime;
+            _cinematicVCamsActive = true;
+        }
+    }
+
+    private void MoveVCamDolly(CinemachineVirtualCamera VCam)
+    {
+        _cinematicPathPosition = VCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition;
+
+        if (_cinematicPathPosition < 1)
+        {
+            _cinematicPathPosition += _cinematicPathSpeed;
+            VCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = _cinematicPathPosition;
+        }
+    }
+
+    private void ResetCinematicVCamPosition (CinemachineVirtualCamera VCam)
+    {
+        VCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0f;
     }
 
     private void AnimateEngageWings()

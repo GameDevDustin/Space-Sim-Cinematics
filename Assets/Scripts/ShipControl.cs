@@ -90,9 +90,6 @@ public class ShipControl : MonoBehaviour
         _playerShipRigidBody = _playerShip.GetComponent<Rigidbody>();
         DoNullChecks();
 
-        //_currentVCam = "CockpitCam";
-        //_cockpitVCam.Priority = 100;
-
         SwitchCamera("CockpitCam");
         _mainCamera.cullingMask = _introCinematicMask;
         

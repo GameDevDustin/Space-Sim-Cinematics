@@ -752,8 +752,8 @@ MonoBehaviour:
   - position: {x: -0.07954769, y: -0.028575394, z: -0.11669833}
     tangent: {x: -0.025114164, y: 0, z: 0}
     roll: 0
-  - position: {x: -0.023957767, y: 0.01212558, z: 0.043160856}
-    tangent: {x: 0.030319069, y: 0, z: 0}
+  - position: {x: -0.017443163, y: 0.012125579, z: 0.04742796}
+    tangent: {x: 0.030319069, y: 0.011171146, z: 0.025775991}
     roll: 0
   - position: {x: 0.09242242, y: 0.08930138, z: 0.07580424}
     tangent: {x: 0.030319069, y: 0, z: 0}
@@ -810,13 +810,10 @@ MonoBehaviour:
   m_Looped: 0
   m_Waypoints:
   - position: {x: 0.10113985, y: 0.14253709, z: -0.14831495}
-    tangent: {x: -0.011165805, y: 0, z: 0}
+    tangent: {x: -0.029301502, y: 0, z: 0}
     roll: -11.75
-  - position: {x: 0.07060104, y: 0.03270111, z: -0.023320964}
-    tangent: {x: -0.00045196712, y: 0, z: 0}
-    roll: 0
   - position: {x: -0.02252636, y: 0.018627167, z: 0.041853324}
-    tangent: {x: -0.107705414, y: 0, z: 0}
+    tangent: {x: -0.10770541, y: 0, z: -0.058798812}
     roll: 58.72
 --- !u!1 &5411767995638961779
 GameObject:
@@ -870,14 +867,11 @@ MonoBehaviour:
   m_Looped: 0
   m_Waypoints:
   - position: {x: 0.06970643, y: 0.1229683, z: 0.10819069}
-    tangent: {x: -0.020633027, y: 0, z: -0.000000007450581}
-    roll: 0
-  - position: {x: 0.043239154, y: 0.02150734, z: -0.025078896}
+    tangent: {x: -0.00026734918, y: 0, z: -0.000000007450581}
+    roll: -47.15
+  - position: {x: 0.032656312, y: 0.02150734, z: -0.06373862}
     tangent: {x: -0.107705414, y: 0, z: 0}
-    roll: 0
-  - position: {x: -0.18025123, y: -0.041299514, z: -0.07140122}
-    tangent: {x: -0.107705414, y: 0, z: 0}
-    roll: 0
+    roll: -16.21
 --- !u!1 &5879678813217051546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,6 +1516,7 @@ GameObject:
   - component: {fileID: 1554586496882447773}
   - component: {fileID: 1554586496882447762}
   - component: {fileID: 3249871510937816299}
+  - component: {fileID: 2250572916031705035}
   m_Layer: 10
   m_Name: StarshipWerewolfPrefab
   m_TagString: Starship
@@ -1563,6 +1558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0110f1b7b02dec441bca1a1555072ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerControlled: 0
   _playerShip: {fileID: 9033124212182211187}
   _xMouseAcceleration: 20
   _yMouseAcceleration: 35
@@ -1585,14 +1581,17 @@ MonoBehaviour:
   _mainCamera: {fileID: 0}
   _followMask:
     serializedVersion: 2
-    m_Bits: 1079
+    m_Bits: 13367
   _cockpitMask:
     serializedVersion: 2
-    m_Bits: 2103
+    m_Bits: 14391
+  _introCinematicMask:
+    serializedVersion: 2
+    m_Bits: 14336
   _currentVCam: 
+  _lastVCamUsed: CockpitCam
   _followVCam: {fileID: 0}
   _cockpitVCam: {fileID: 0}
-  _lastVCamUsed: FollowCam
   _cinematicVCams:
   - {fileID: 0}
   - {fileID: 0}
@@ -1602,7 +1601,7 @@ MonoBehaviour:
   _cinematicVCamsActive: 0
   _cinematicPathInProgress: 0
   _cinematicPathPosition: 0
-  _cinematicPathSpeed: 0.01
+  _cinematicPathSpeed: 0.0015
   _starshipAnimator: {fileID: 3249871510937816299}
   _wingsAnimator: {fileID: 8939105524545759433}
   _minigunAnimator1: {fileID: 8939105534301048705}
@@ -1632,9 +1631,9 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9033124212182211187}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bc96d7932f522554b84e9c5ebad20ac8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 92f772ed31f5a734989ff186542978b6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1644,6 +1643,96 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2250572916031705035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9033124212182211187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 141cc9fe08078fd4d99bf6b097e29c21, type: 2}
+    - {fileID: 11400000, guid: 71f998e8e3f02e34dafccaee7b6609fd, type: 2}
+    - {fileID: 11400000, guid: e1c57d62e0c27ef4ba76de6356a980c8, type: 2}
+    - {fileID: 11400000, guid: 92e12e92261ec1746a1eb4aa8ef969ed, type: 2}
+    - {fileID: 11400000, guid: d8a489e87133bad42a63075ab63d5c0f, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1554586496882447773}
+          m_TargetAssemblyTypeName: ShipControl, Assembly-CSharp
+          m_MethodName: EnablePlayerControl
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1554586496882447773}
+          m_TargetAssemblyTypeName: ShipControl, Assembly-CSharp
+          m_MethodName: DisablePlayerControl
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3249871510937816299}
+          m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+          m_MethodName: set_enabled
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1554586496882447773}
+          m_TargetAssemblyTypeName: ShipControl, Assembly-CSharp
+          m_MethodName: SetCameraMask
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: introCinematic
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1554586496882447773}
+          m_TargetAssemblyTypeName: ShipControl, Assembly-CSharp
+          m_MethodName: SetCameraMask
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: cockpit
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &9033124212437309689
 GameObject:
   m_ObjectHideFlags: 0

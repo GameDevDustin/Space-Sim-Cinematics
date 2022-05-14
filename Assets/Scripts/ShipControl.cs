@@ -8,6 +8,7 @@ public class ShipControl : MonoBehaviour
 {
     //Player control related
     [Header("Player Control Related")]
+    [SerializeField] private bool _playerControlled = false;
     [Space(5)]
     [SerializeField] private GameObject _playerShip;
     private Rigidbody _playerShipRigidBody;
@@ -31,6 +32,7 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private float _defaultRollSpeed = 5000f;
     [SerializeField] private float _thrustSpeed = 5000f;
     [SerializeField] private float _thrusterBoostMultiplier = 1f;
+    [Space(5)]
     [SerializeField] private bool _boostActive = false;
     [SerializeField] private bool _thrustActive = false;
     [SerializeField] private float _timeThrustLastActive = 0;
@@ -43,11 +45,12 @@ public class ShipControl : MonoBehaviour
     [Space(5)]
     [SerializeField] private LayerMask _followMask;
     [SerializeField] private LayerMask _cockpitMask;
+    [SerializeField] private LayerMask _introCinematicMask;
     [Space(10)]
     [SerializeField] private string _currentVCam;
+    [SerializeField] private string _lastVCamUsed = "CockpitCam";
     [SerializeField] private CinemachineVirtualCamera _followVCam;
     [SerializeField] private CinemachineVirtualCamera _cockpitVCam;
-    [SerializeField] private string _lastVCamUsed = "FollowCam";
     [Space(5)]
     [SerializeField] private CinemachineVirtualCamera[] _cinematicVCams;
     [SerializeField] private float _lastCinematicVCamStartTime = 0;
@@ -86,8 +89,13 @@ public class ShipControl : MonoBehaviour
         }
         _playerShipRigidBody = _playerShip.GetComponent<Rigidbody>();
         DoNullChecks();
-        _currentVCam = "FollowCam";
-        _followVCam.Priority = 100;
+
+        //_currentVCam = "CockpitCam";
+        //_cockpitVCam.Priority = 100;
+
+        SwitchCamera("CockpitCam");
+        _mainCamera.cullingMask = _introCinematicMask;
+        
         _wingsAnimator.SetBool("isEngaged", false);
 
         Cursor.lockState = CursorLockMode.Confined;
@@ -97,16 +105,22 @@ public class ShipControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckInput();
-        if (_cinematicVCamsActive)
+        if (_playerControlled)
         {
-            MoveVCamDolly(_cinematicVCams[_lastCinematicVCamUsed]);
+            CheckInput();
+            if (_cinematicVCamsActive)
+            {
+                MoveVCamDolly(_cinematicVCams[_lastCinematicVCamUsed]);
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        CheckInputFixedUpdate();
+        if (_playerControlled)
+        {
+            CheckInputFixedUpdate();
+        }
     }
 
     void CheckInput()
@@ -123,7 +137,7 @@ public class ShipControl : MonoBehaviour
             }
             else if (_currentVCam == "CinematicCam")
             {
-                SwitchCamera("FollowCam");
+                SwitchCamera(_lastVCamUsed);
             }
         }
 
@@ -432,7 +446,6 @@ public class ShipControl : MonoBehaviour
                 _mainCamera.cullingMask = _cockpitMask;
                 _currentVCam = "CockpitCam";
                 _followVCam.Priority = 10;
-                //_followVCam.enabled = false;
 
                 if (_cinematicVCams != null)
                 {
@@ -527,6 +540,22 @@ public class ShipControl : MonoBehaviour
         VCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0f;
     }
 
+    public void SetCameraMask(string newMask)
+    {
+        switch (newMask)
+        {
+            case "follow":
+                _mainCamera.cullingMask = _followMask;
+                break;
+            case "cockpit":
+                _mainCamera.cullingMask = _cockpitMask;
+                break;
+            case "introCinematic":
+                _mainCamera.cullingMask = _introCinematicMask;
+                break;
+        }
+    }
+
     private void AnimateEngageWings()
     {
         _wingsAnimator.SetTrigger("Engage");
@@ -543,6 +572,16 @@ public class ShipControl : MonoBehaviour
     {
         //newThrusterPositions = "none" | "forward" | "back"
         //newJoystickPositions = "none" | "forward" | "back" | "left" | "right" | "forward-left" | "forward-right" | "back-left" | "back-right"
+    }
+
+    public void EnablePlayerControl()
+    {
+        _playerControlled = true;
+    }
+
+    public void DisablePlayerControl()
+    {
+        _playerControlled = false;
     }
 
     void DoNullChecks()

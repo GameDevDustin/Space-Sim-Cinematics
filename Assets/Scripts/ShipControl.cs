@@ -94,7 +94,7 @@ public class ShipControl : MonoBehaviour
         _thrustTrailTransform = _thrustTrailGO.transform;
         _thrustTrailParticleSystem = _thrustTrailTransform.GetComponent<ParticleSystem>();
         //Debug.Log("color = " + _thrustTrailParticleSystem.startColor);
-        Debug.Log("localscale = " + _thrustTrailTransform.localScale);
+        //Debug.Log("localscale = " + _thrustTrailTransform.localScale);
         DoNullChecks();
 
         SwitchCamera("CockpitCam");
@@ -593,17 +593,17 @@ public class ShipControl : MonoBehaviour
         switch (thrusterMode) 
         {
             case 0:
-                _thrustTrailTransform.localScale.Set(1f, 0.5f, 0.3f);
+                _thrustTrailTransform.localScale = new Vector3(1f, 0.5f, 0.5f);
                 _thrustTrailParticleSystem.startColor = noThrustColor; //suggested main.startColor not working, Unity documentation shows it as assignable but visual studio says no
                 Debug.Log("ThrusterMode 0 fired!");
                 break;
             case 1:
-                _thrustTrailTransform.localScale.Set(1f, 0.8f, 0.5f);
+                _thrustTrailTransform.localScale = new Vector3(1f, 0.8f, 0.7f);
                 _thrustTrailParticleSystem.startColor = regularThrustColor;
                 Debug.Log("ThrusterMode 1 fired!");
                 break;
             case 2:
-                _thrustTrailTransform.localScale.Set(1f, 1f, 0.9f);
+                _thrustTrailTransform.localScale = new Vector3(1f, 1f, 0.9f);
                 _thrustTrailParticleSystem.startColor = boostThrustColor;
                 Debug.Log("ThrusterMode 2 fired!");
                 break;

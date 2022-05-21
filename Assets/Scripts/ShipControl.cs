@@ -37,6 +37,9 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private bool _thrustActive = false;
     [SerializeField] private float _timeThrustLastActive = 0;
     [SerializeField] private float _currentTime;
+    [SerializeField] private GameObject _thrustTrailGO;
+    private Transform _thrustTrailTransform;
+    private ParticleSystem _thrustTrailParticleSystem;
 
     //Camera related
     [Header("Camera Control Related")]
@@ -88,6 +91,10 @@ public class ShipControl : MonoBehaviour
             _playerShip = this.gameObject;
         }
         _playerShipRigidBody = _playerShip.GetComponent<Rigidbody>();
+        _thrustTrailTransform = _thrustTrailGO.transform;
+        _thrustTrailParticleSystem = _thrustTrailTransform.GetComponent<ParticleSystem>();
+        //Debug.Log("color = " + _thrustTrailParticleSystem.startColor);
+        Debug.Log("localscale = " + _thrustTrailTransform.localScale);
         DoNullChecks();
 
         SwitchCamera("CockpitCam");
@@ -176,6 +183,7 @@ public class ShipControl : MonoBehaviour
         if (_boostActive)
         {
             _thrusterBoostMultiplier = 4f;
+            SetThrusterTrailAppearance(2);
         } else
         {
             _thrusterBoostMultiplier = 1f;
@@ -187,13 +195,17 @@ public class ShipControl : MonoBehaviour
             wActive = true;
             _thrustActive = true;
             _timeThrustLastActive = _currentTime;
+            if (!_boostActive)
+            {
+                SetThrusterTrailAppearance(1);
+            }
         }
         else 
         { 
             wActive = false;
             _thrustActive = false;
-
             AddSlowingThrust(transform.forward);
+            SetThrusterTrailAppearance(0);
         }
 
         if (Input.GetKey(KeyCode.S))
@@ -571,6 +583,33 @@ public class ShipControl : MonoBehaviour
         //newJoystickPositions = "none" | "forward" | "back" | "left" | "right" | "forward-left" | "forward-right" | "back-left" | "back-right"
     }
 
+    private void SetThrusterTrailAppearance(int thrusterMode)
+    {
+        //thruster modes - 0 no thrust | 1 regular thrust | 2 boost thrust
+        Color noThrustColor = new Color(1.0f,1.0f,1.0f,0.098f);
+        Color regularThrustColor = new Color(1.0f,1.0f,1.0f,0.376f);
+        Color boostThrustColor = new Color(1.0f,1.0f,1.0f,1.0f);
+
+        switch (thrusterMode) 
+        {
+            case 0:
+                _thrustTrailTransform.localScale.Set(1f, 0.5f, 0.3f);
+                _thrustTrailParticleSystem.startColor = noThrustColor; //suggested main.startColor not working, Unity documentation shows it as assignable but visual studio says no
+                Debug.Log("ThrusterMode 0 fired!");
+                break;
+            case 1:
+                _thrustTrailTransform.localScale.Set(1f, 0.8f, 0.5f);
+                _thrustTrailParticleSystem.startColor = regularThrustColor;
+                Debug.Log("ThrusterMode 1 fired!");
+                break;
+            case 2:
+                _thrustTrailTransform.localScale.Set(1f, 1f, 0.9f);
+                _thrustTrailParticleSystem.startColor = boostThrustColor;
+                Debug.Log("ThrusterMode 2 fired!");
+                break;
+        }
+    }
+
     public void EnablePlayerControl()
     {
         _playerControlled = true;
@@ -619,5 +658,17 @@ public class ShipControl : MonoBehaviour
         //{
         //    Debug.Log("ShipControl::DoNullChecks()::_starshipAnimator is null!");
         //}
+        if (_thrustTrailGO == null)
+        {
+            Debug.Log("ShipControl::DoNullChecks()::_thrustTrailGO is null!");
+        }
+        if (_thrustTrailTransform == null)
+        {
+            Debug.Log("ShipControl::DoNullChecks()::_thrustTrailTransform is null!");
+        }
+        if (_thrustTrailParticleSystem == null)
+        {
+            Debug.Log("ShipControl::DoNullChecks()::_thrustTrailParticleSystem is null!");
+        }
     }
 }

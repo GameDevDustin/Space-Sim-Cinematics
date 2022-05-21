@@ -6425,6 +6425,10 @@ MonoBehaviour:
   _cinematicPathInProgress: 0
   _cinematicPathPosition: 0
   _cinematicPathSpeed: 0.0015
+  _musicAudioSourceGO: {fileID: 0}
+  _fadeOutMusicActive: 0
+  _fadeInMusicActive: 0
+  _musicVolume: 0
   _starshipAnimator: {fileID: 3249871510937816299}
   _wingsAnimator: {fileID: 8939105524545759433}
   _minigunAnimator1: {fileID: 8939105534301048705}
@@ -7042,12 +7046,12 @@ PrefabInstance:
     - target: {fileID: 3700097356776053832, guid: 59d57f5ac9689bc45a30e4d414c609f3,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.57
       objectReference: {fileID: 0}
     - target: {fileID: 3700097356776053832, guid: 59d57f5ac9689bc45a30e4d414c609f3,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 3700097356776053832, guid: 59d57f5ac9689bc45a30e4d414c609f3,
         type: 3}

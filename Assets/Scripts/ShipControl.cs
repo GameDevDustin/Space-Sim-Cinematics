@@ -63,6 +63,10 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private bool _cinematicPathInProgress = false;
     [SerializeField] private float _cinematicPathPosition = 0f;
     [SerializeField] private float _cinematicPathSpeed = 0.0015f;
+    [SerializeField] private GameObject _musicAudioSourceGO;
+    [SerializeField] private bool _fadeOutMusicActive = false;
+    [SerializeField] private bool _fadeInMusicActive = false;
+    [SerializeField] private float _musicVolume = 0f;
 
     //Animation related
     [Header("Animation Related")]
@@ -93,11 +97,10 @@ public class ShipControl : MonoBehaviour
         _playerShipRigidBody = _playerShip.GetComponent<Rigidbody>();
         _thrustTrailTransform = _thrustTrailGO.transform;
         _thrustTrailParticleSystem = _thrustTrailTransform.GetComponent<ParticleSystem>();
-        //Debug.Log("color = " + _thrustTrailParticleSystem.startColor);
-        //Debug.Log("localscale = " + _thrustTrailTransform.localScale);
         DoNullChecks();
 
         SwitchCamera("CockpitCam");
+        _fadeOutMusicActive = false;
         _mainCamera.cullingMask = _introCinematicMask;
         
         _wingsAnimator.SetBool("isEngaged", false);
@@ -116,6 +119,11 @@ public class ShipControl : MonoBehaviour
             {
                 MoveVCamDolly(_cinematicVCams[_lastCinematicVCamUsed]);
             }
+        }
+
+        if (_fadeOutMusicActive || _fadeInMusicActive)
+        {
+            FadeMusic();
         }
     }
 
@@ -448,8 +456,10 @@ public class ShipControl : MonoBehaviour
                 _followVCam.GetComponent<AudioSource>().enabled = true;
                 _cockpitVCam.GetComponent<AudioSource>().enabled = false;
 
-                //turn off music background audio
-
+                //turn off background music
+                //_musicAudioSourceGO.GetComponent<AudioSource>().enabled = false;
+                _fadeInMusicActive = false;
+                _fadeOutMusicActive = true;
                 break;
             case "CockpitCam":
                 _mainCamera.cullingMask = _cockpitMask;
@@ -471,8 +481,10 @@ public class ShipControl : MonoBehaviour
                 _cockpitVCam.GetComponent<AudioSource>().enabled = true;
                 _followVCam.GetComponent<AudioSource>().enabled = false;
 
-                //turn off music background audio
-
+                //turn off background music
+                //_musicAudioSourceGO.GetComponent<AudioSource>().enabled = false;
+                _fadeInMusicActive = false;
+                _fadeOutMusicActive = true;
                 break;
             case "CinematicCam":
                 _mainCamera.cullingMask = _followMask;
@@ -486,8 +498,12 @@ public class ShipControl : MonoBehaviour
                 _followVCam.GetComponent<AudioSource>().enabled = true;
                 _cockpitVCam.GetComponent<AudioSource>().enabled = false;
 
-                //Turn on Music background audio
-
+                //Turn on background music
+                //_musicVolume = 0f;
+                //_musicAudioSourceGO.GetComponent<AudioSource>().volume = _musicVolume;
+                //_musicAudioSourceGO.GetComponent<AudioSource>().enabled = true;
+                _fadeInMusicActive = true;
+                _fadeOutMusicActive = false;
                 break;
         }
     }
@@ -565,6 +581,39 @@ public class ShipControl : MonoBehaviour
         }
     }
 
+    private void FadeMusic()
+    {
+        if (_fadeInMusicActive)
+        {
+            if (!_musicAudioSourceGO.GetComponent<AudioSource>().enabled)
+            {
+                _musicAudioSourceGO.GetComponent<AudioSource>().enabled = true;
+            }
+
+            if (_musicVolume < 0.1f)
+            {
+                _musicVolume += 0.01f * Time.deltaTime;
+            } else if (_musicVolume > 0.1f)
+            {
+                _musicVolume = 0.1f;
+            }
+        }
+
+        if (_fadeOutMusicActive)
+        {
+            _musicVolume -= 0.02f * Time.deltaTime;
+        }
+
+        _musicAudioSourceGO.GetComponent<AudioSource>().volume = _musicVolume;
+
+        if (_musicVolume <= 0f)
+        {
+            _fadeOutMusicActive = false;
+            _musicAudioSourceGO.GetComponent<AudioSource>().enabled = false;
+            _musicVolume = 0f;
+        }
+    }
+
     private void AnimateEngageWings()
     {
         _wingsAnimator.SetTrigger("Engage");
@@ -588,24 +637,24 @@ public class ShipControl : MonoBehaviour
         //thruster modes - 0 no thrust | 1 regular thrust | 2 boost thrust
         Color noThrustColor = new Color(1.0f,1.0f,1.0f,0.098f);
         Color regularThrustColor = new Color(1.0f,1.0f,1.0f,0.376f);
-        Color boostThrustColor = new Color(1.0f,1.0f,1.0f,1.0f);
+        Color boostThrustColor = new Color(1.0f,0.675f,0.675f,1.0f);
 
         switch (thrusterMode) 
         {
             case 0:
-                _thrustTrailTransform.localScale = new Vector3(1f, 0.5f, 0.5f);
+                _thrustTrailTransform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
                 _thrustTrailParticleSystem.startColor = noThrustColor; //suggested main.startColor not working, Unity documentation shows it as assignable but visual studio says no
-                Debug.Log("ThrusterMode 0 fired!");
+                //Debug.Log("ThrusterMode 0 fired!");
                 break;
             case 1:
-                _thrustTrailTransform.localScale = new Vector3(1f, 0.8f, 0.7f);
+                _thrustTrailTransform.localScale = new Vector3(0.5f, 0.7f, 0.7f);
                 _thrustTrailParticleSystem.startColor = regularThrustColor;
-                Debug.Log("ThrusterMode 1 fired!");
+                //Debug.Log("ThrusterMode 1 fired!");
                 break;
             case 2:
-                _thrustTrailTransform.localScale = new Vector3(1f, 1f, 0.9f);
+                _thrustTrailTransform.localScale = new Vector3(0.4f, 0.4f, 0.9f);
                 _thrustTrailParticleSystem.startColor = boostThrustColor;
-                Debug.Log("ThrusterMode 2 fired!");
+                //Debug.Log("ThrusterMode 2 fired!");
                 break;
         }
     }

@@ -63,6 +63,9 @@ public class ShipControl : MonoBehaviour
     [SerializeField] private bool _cinematicPathInProgress = false;
     [SerializeField] private float _cinematicPathPosition = 0f;
     [SerializeField] private float _cinematicPathSpeed = 0.0015f;
+    [Space(10)]
+    [SerializeField] private GameObject _globalVolumeDefault;
+    [Space(10)]
     [SerializeField] private GameObject _musicAudioSourceGO;
     [SerializeField] private bool _fadeOutMusicActive = false;
     [SerializeField] private bool _fadeInMusicActive = false;
@@ -457,7 +460,6 @@ public class ShipControl : MonoBehaviour
                 _cockpitVCam.GetComponent<AudioSource>().enabled = false;
 
                 //turn off background music
-                //_musicAudioSourceGO.GetComponent<AudioSource>().enabled = false;
                 _fadeInMusicActive = false;
                 _fadeOutMusicActive = true;
                 break;
@@ -482,7 +484,6 @@ public class ShipControl : MonoBehaviour
                 _followVCam.GetComponent<AudioSource>().enabled = false;
 
                 //turn off background music
-                //_musicAudioSourceGO.GetComponent<AudioSource>().enabled = false;
                 _fadeInMusicActive = false;
                 _fadeOutMusicActive = true;
                 break;
@@ -499,9 +500,6 @@ public class ShipControl : MonoBehaviour
                 _cockpitVCam.GetComponent<AudioSource>().enabled = false;
 
                 //Turn on background music
-                //_musicVolume = 0f;
-                //_musicAudioSourceGO.GetComponent<AudioSource>().volume = _musicVolume;
-                //_musicAudioSourceGO.GetComponent<AudioSource>().enabled = true;
                 _fadeInMusicActive = true;
                 _fadeOutMusicActive = false;
                 break;
@@ -659,6 +657,11 @@ public class ShipControl : MonoBehaviour
         }
     }
 
+    public void SetTimeSinceLastThrust(float newValue)
+    {
+        _timeThrustLastActive = newValue;
+    }
+
     public void EnablePlayerControl()
     {
         _playerControlled = true;
@@ -667,6 +670,11 @@ public class ShipControl : MonoBehaviour
     public void DisablePlayerControl()
     {
         _playerControlled = false;
+    }
+
+    public void EnableDefaultPPVolume ()
+    {
+        _globalVolumeDefault.SetActive(true);
     }
 
     void DoNullChecks()

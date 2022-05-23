@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class ShipControl : MonoBehaviour
 {
@@ -105,11 +106,15 @@ public class ShipControl : MonoBehaviour
         SwitchCamera("CockpitCam");
         _fadeOutMusicActive = false;
         _mainCamera.cullingMask = _introCinematicMask;
-        
+
         _wingsAnimator.SetBool("isEngaged", false);
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
+
+        if (SceneManager.GetSceneByBuildIndex(0).isLoaded) {
+            SceneManager.UnloadSceneAsync(0);
+        }    
     }
 
     // Update is called once per frame
@@ -154,6 +159,11 @@ public class ShipControl : MonoBehaviour
             {
                 SwitchCamera(_lastVCamUsed);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
 
         _currentTime = Time.time;

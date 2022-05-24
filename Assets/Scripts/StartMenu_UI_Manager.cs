@@ -28,7 +28,7 @@ public class StartMenu_UI_Manager : MonoBehaviour
 
     public void ShowInstructions()
     {
-        if (_spaceSimHeader.active)
+        if (_spaceSimHeader.activeInHierarchy)
         {
             _spaceSimHeader.SetActive(false);
         } else
@@ -36,7 +36,7 @@ public class StartMenu_UI_Manager : MonoBehaviour
             _spaceSimHeader.SetActive(true);
         }
 
-        if (!_instructionsPanel.active)
+        if (!_instructionsPanel.activeInHierarchy)
         {
             _instructionsPanel.SetActive(true);
         } else
